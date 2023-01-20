@@ -2,18 +2,14 @@
 <!-- La directive ngStyle permet d'attribuer une valeur dynamique directement à un style -->
 <!-- *ngFor et *ngIf sont des directives structurelles -->
 <div class="face-snap-card" [ngClass]="{ 'snapped': faceSnap.snaps > 0 }">
-  <h2>{{ faceSnap.title | uppercase }}</h2>
-  <p>{{ faceSnap.description }}</p>
-  <button (click)="onViewFaceSnap()">VIEW</button>
-
   <!-- <h2>{{ faceSnap.title | uppercase }}</h2>
-  <h2>{{ faceSnap.title | lowercase }}</h2>
+  <h2>{{ faceSnap.title | lowercase }}</h2> -->
   <h2>{{ faceSnap.title | titlecase }}</h2>
-  <p>{{ faceSnap.tion }}</p>
+  <a routerLink="/facesnaps">BACK</a>
   <img [src]="faceSnap.imageUrl" [alt]="faceSnap.title">
   <p *ngIf="faceSnap.location">Photo prise à {{ faceSnap.location }}</p>
   <p>Mis en ligne le {{ faceSnap.createdDate | date }}</p>
-  <p>Mis en ligne le {{ faceSnap.createdDate | date: 'longDate' }}</p>
+  <!-- <p>Mis en ligne le {{ faceSnap.createdDate | date: 'longDate' }}</p>
   <p>Mis en ligne le {{ faceSnap.createdDate | date: 'dd/MM/yy, à HH:mm' }}</p>
   <p>Mis en ligne {{ faceSnap.createdDate | date: 'à HH:mm, le d MMMM yyyy' }}</p>
   <p>{{ 4346234.36 }}</p>
@@ -23,10 +19,10 @@
   <p>{{ 0.336 | percent }}</p>
   <p>{{ 344.36 | currency }}</p>
   <p>{{ 344.36 | currency: 'EUR' }}</p>
-  <span>{{ 122422.467 | number }}</span>
+  <span>{{ 122422.467 | number }}</span> -->
 
   <p>
     <button (click)="onSnap()">{{ buttonText }}</button>
     <span [ngStyle]="{ color: 'rgb(0, ' + faceSnap.snaps + ', 0)' }">👍🏻 {{ faceSnap.snaps }}</span>
-  </p> -->
+  </p>
 </div>
