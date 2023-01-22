@@ -6,7 +6,8 @@
 
 <!-- La syntaxe valable est  <balise *ngFor="let element of array" [property]="element" >. -->
 <!-- *ngFor et *ngIf sont des directives structurelles -->
-<!-- <app-header></app-header>
-<router-outlet></router-outlet> -->
+<app-header></app-header>
+<router-outlet></router-outlet>
 
 <h1>{{interval$ | async}}</h1>
+<!-- les Observables auxquelles nous avons souscrites avec async sont automatiquement unsubscribe en même temps que le composant. -->
