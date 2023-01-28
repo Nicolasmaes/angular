@@ -1,7 +1,9 @@
 <!-- La directive ngClass permet d'attribuer une classe CSS à un élément selon une condition -->
 <!-- La directive ngStyle permet d'attribuer une valeur dynamique directement à un style -->
 <!-- *ngFor et *ngIf sont des directives structurelles -->
-<div class="face-snap-card" [ngClass]="{ 'snapped': faceSnap.snaps > 0 }">
+<div class="face-snap-card" *ngIf="faceSnap$ | async as faceSnap" [ngClass]="{ 'snapped': faceSnap.snaps > 0 }">
+  <!-- faceSnap$ | async signifie que cette div n'apparaîtra pas tant que le serveur n'a pas répondu-->
+  <!-- as faceSnap  est l'alias utilisé dans le template ci-dessous. On l'utilise pour afficher la réponse du serveur. faceSnap est utilisable à l'intérieur de la dic-->
   <!-- <h2>{{ faceSnap.title | uppercase }}</h2>
   <h2>{{ faceSnap.title | lowercase }}</h2> -->
   <h2>{{ faceSnap.title | titlecase }}</h2>
