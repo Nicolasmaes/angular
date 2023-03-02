@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { FaceSnap } from '../models/face-snap.model';
 import { FaceSnapsService } from '../services/face-snaps.service';
 
@@ -25,14 +25,18 @@ export class SingleFaceSnapComponent implements OnInit {
   }
 
   // Cette fonction  n'autorise qu'un seul like par photo
-  onSnap() {
-    // if (this.buttonText === 'Oh Snap!') {
-    //   this.faceSnapsService.snapFaceSnapById(this.faceSnap.id, 'snap');
-    //   this.buttonText = 'Oops, unSnap!';
-    // } else {
-    //   this.faceSnapsService.snapFaceSnapById(this.faceSnap.id, 'unsnap');
-    //   this.buttonText = 'Oh Snap!'
-    // }
+  onSnap(faceSnapId: number) {
+    if (this.buttonText === 'Oh Snap!') {
+      this.faceSnap$ = this.faceSnapsService.snapFaceSnapById(faceSnapId, 'snap').pipe(
+        tap(() => {
+          this.buttonText = 'Oops, unSnap!';
+        }));
+    } else {
+      this.faceSnap$ = this.faceSnapsService.snapFaceSnapById(faceSnapId, "unsnap").pipe(
+        tap(() => {
+          this.buttonText = 'Oh Snap!';
+        }));
+    }
   }
 
   // Fonction pour tester le ngClass qui change la couleur du texte selon le nombre de like

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { interval, map, filter, Observable, tap, switchMap } from 'rxjs';
 import { FaceSnap } from '../models/face-snap.model';
 
 // Un service n'a pas de méthode ngOnInit() car ils ne sont pas instanciés de la même manière que les components.
@@ -13,9 +13,6 @@ export class FaceSnapsService {
 
   constructor(private http: HttpClient) { }
 
-
-  faceSnaps: FaceSnap[] = [];
-
   getAllFaceSnaps(): Observable<FaceSnap[]> {
     return this.http.get<FaceSnap[]>('http://localhost:3000/facesnaps');
   }
@@ -25,18 +22,43 @@ export class FaceSnapsService {
 
   }
 
-  snapFaceSnapById(faceSnapId: number, snapType: 'snap' | 'unsnap'): void {
-    // const faceSnap = this.getFaceSnapById(faceSnapId);
-    // snapType === 'snap' ? faceSnap.snaps++ : faceSnap.snaps--;
+  snapFaceSnapById(faceSnapId: number, snapType: 'snap' | 'unsnap'): Observable<FaceSnap> {
+    return this.getFaceSnapById(faceSnapId).pipe(
+      map(faceSnap => ({
+        ...faceSnap,
+        snaps: faceSnap.snaps + (snapType === 'snap' ? 1 : -1)
+      })),
+      switchMap(updatedFaceSnap => this.http.put<FaceSnap>(
+        `http://localhost:3000/facesnaps/${faceSnapId}`,
+        updatedFaceSnap)
+      )
+    );
   }
 
-  addFaceSnap(formValue: { title: string, description: string, imageUrl: string, location?: string }) {
-    const faceSnap: FaceSnap = {
-      ...formValue,
-      snaps: 0,
-      createdDate: new Date(),
-      id: this.faceSnaps[this.faceSnaps.length - 1].id + 1
-    };
-    this.faceSnaps.push(faceSnap);
+  addFaceSnap(formValue: { title: string, description: string, imageUrl: string, location?: string }): Observable<FaceSnap> {
+    // console.log(formValue)
+    // this.getAllFaceSnaps();
+    // snapToSave!: Observable<FaceSnap[]>;
+
+    // this.http.post<FaceSnap>(
+    //   'http://localhost:3000/facesnaps',
+    //   snapToSave)
+
+    //   return this.getFaceSnapById(faceSnapId)
+
+    return this.getAllFaceSnaps().pipe(
+      map(facesnaps => [...facesnaps].sort((a: FaceSnap, b: FaceSnap) => a.id - b.id)),
+      map(sortedFacesnaps => sortedFacesnaps[sortedFacesnaps.length - 1]),
+      map(previousFacesnap => ({
+        ...formValue,
+        snaps: 0,
+        createdDate: new Date(),
+        id: previousFacesnap.id + 1
+      })),
+      switchMap(snapToSave => this.http.post<FaceSnap>(
+        'http://localhost:3000/facesnaps',
+        snapToSave)
+      )
+    )
   }
 }

@@ -24,7 +24,7 @@
   <span>{{ 122422.467 | number }}</span> -->
 
   <p>
-    <button (click)="onSnap()">{{ buttonText }}</button>
+    <button (click)="onSnap(faceSnap.id)">{{ buttonText }}</button>
     <span [ngStyle]="{ color: 'rgb(0, ' + faceSnap.snaps + ', 0)' }">👍🏻 {{ faceSnap.snaps }}</span>
   </p>
 </div>
